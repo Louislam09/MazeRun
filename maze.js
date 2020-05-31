@@ -564,7 +564,7 @@ function gameLoop() {
 
 playButton.addEventListener('click', () => {
 	playerName = playerNameInput.value;
-	if (playerName == '') return alert('hoasdho');
+	if (playerName == '') return alert('Necesitas Poner Tu Nombre!');
 	hiddenSection(homeContainer);
 	showSection(pauseContainer);
 	showSection(timerContainer);
