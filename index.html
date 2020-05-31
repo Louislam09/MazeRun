@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Maze🗺 Run🏃 Game🎮</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="levels/icon.png" type="image/png">
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase.js" defer></script>
+    <!-- <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-analytics.js" defer></script> -->
+    <script src="js/data.js" defer></script>
+    <script src="js/table.js" defer></script>
+    <script src="js/levels.js" defer></script>
+    <script src="maze.js" defer></script>
+    <script src="js/swipe.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="home-container">
+            <h1 class="title"><span>M</span>aze<span>R</span>un</h1>
+            <input type="text" class="player-name" placeholder="Escribe Tu Nombre">
+            <button class="play-button">PLAY</button>
+            <button class="training-button">TRAINING</button>
+            <button class="scoreboard-button">ScoreBoard</button>
+        </div>
+        <div class="speedrun">
+            <div class="score"></div>
+        </div>
+        <div class="pause-container">
+            <input type="checkbox" name="pause" id="pause-input">
+            <label for="pause-input">Pause</label>
+        </div>
+        <div class="timer">
+            <div class="level"></div>
+            <div class="time"></div>
+        </div>
+        <div class="gameover">
+            <div class="gameover-message">¡Game </div><span class="gameover-span">Over!</span>
+            <div class="gameover-level-message"><span>Level</span> </div>
+            <div class="gameover-time-message"><span>⏰</span> </div>
+            <button class='restart-button'>RESTART</button>
+            <button class="go-home-button-2">➡️HOME</button>
+        </div>
+        <div class="pause-section">
+            <div class="pause-message">¡Pause </div><span>On!</span>
+        </div>
+        <div class="instructions">
+            <div class="instruction-title">Controles</div>
+            <div class="swipe-message-0">Para moverte</div>
+            <div class="swipe-hand-up">👆🏽</div>
+            <div class="swipe-hand-down">👇🏽</div>
+            <div class="swipe-hand-left">👉🏽</div>
+            <div class="swipe-hand-right">👈🏽</div>
+            <div class="swipe-message-1">Desliza en direccion a donde te quieres mover.</div>
+            <button class="go-home-button">➡️HOME</button>
+        </div>
+        <canvas></canvas>
+    </div>
+
+    <!-- SCORE TABLE -->
+    <div class="table-board" id="tableBoard">
+        <button class="hidden-table-button">❌</button>
+        <table class="table" id="table">
+            <thead>
+                <thead>
+                    <tr>
+                        <th>Place</th>
+                        <th>Name</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+            </thead>
+
+            <tbody>
+
+            </tbody>
+            <!-- <tbody>
+            <tr>
+                <td class="1st🥇" style="color: goldenrod;">1st🥇</td>
+                <td class="1st🥇" style="color: goldenrod;">8900</td>
+                <td class="1st🥇" style="color: goldenrod;">Luis</td>
+            </tr>
+            <tr>
+                <td class="2nd🥈" style="color: black;">2nd🥈</td>
+                <td class="2nd🥈" style="color: black;">5800</td>
+                <td class="2nd🥈" style="color: black;">KM</td>
+            </tr>
+            <tr>
+                <td class="3th🥉" style="color: orangered;">3th🥉</td>
+                <td class="3th🥉" style="color: orangered;">4200</td>
+                <td class="3th🥉" style="color: orangered;">xzc</td>
+            </tr>
+            <tr>
+                <td class="4th🏅" style="color: green;">4th🏅</td>
+                <td class="4th🏅" style="color: green;">4000</td>
+                <td class="4th🏅" style="color: green;">asddsa</td>
+            </tr>
+            <tr>
+                <td class="5th🏅" style="color: green;">5th🏅</td>
+                <td class="5th🏅" style="color: green;">3800</td>
+                <td class="5th🏅" style="color: green;">ad</td>
+            </tr>
+            <tr>
+                <td class="6th🏅" style="color: green;">6th🏅</td>
+                <td class="6th🏅" style="color: green;">3800</td>
+                <td class="6th🏅" style="color: green;">ad</td>
+            </tr>
+            <tr>
+                <td class="7th🏅" style="color: green;">7th🏅</td>
+                <td class="7th🏅" style="color: green;">3800</td>
+                <td class="7th🏅" style="color: green;">ad</td>
+            </tr>
+            <tr>
+                <td class="8th🏅" style="color: green;">8th🏅</td>
+                <td class="8th🏅" style="color: green;">3800</td>
+                <td class="8th🏅" style="color: green;">ad</td>
+            </tr>
+            <tr>
+                <td class="9th🏅" style="color: green;">9th🏅</td>
+                <td class="9th🏅" style="color: green;">3800</td>
+                <td class="9th🏅" style="color: green;">ad</td>
+            </tr>
+        </tbody> -->
+        </table>
+    </div>
+
+    <span class="autor">Made with ❤️ by Lam09 </span>
+
+</body>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        console.log("Will the sevice worker register?");
+
+        navigator.serviceWorker.register("service-worker.js").then(function (reg) {
+            console.log("Yes, it did.");
+        }).catch(function (err) {
+            console.log("No it didn't. This happended:", err)
+        });
+
+    }
+</script>
+
+</html>

@@ -1,0 +1,15 @@
+{
+	"short_name": "MazeRun",
+	"name": "MazeRun",
+	"theme_color": "#4A90E2",
+	"background_color": "#0789ca",
+	"display": "standalone",
+	"icon": [
+		{
+			"src": "levels/icon.png",
+			"type": "image/png",
+			"size": "192x192"
+		}
+	],
+	"start_url": "http://127.0.0.1:5500/MazeRun/index.html"
+}
