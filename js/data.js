@@ -33,9 +33,7 @@ function saveDataToFirebase(data) {
 		let result = ref.push(data);
 		if (data.key == '') data.key = result.key;
 	} else {
-		database.ref('scores/' + playerKey + '/time').set(data.time);
-		// var db = firebase.database();
-		// db.ref("-Users/-KUanJA9egwmPsJCxXpv/displayName").set("New trainer")
+		database.ref('scores/' + playerKey).set(data);
 	}
 
 	savePlayerInfoToLocalstorage(data);
@@ -50,7 +48,8 @@ function gotData(data) {
 		let name = scores[k].name;
 		let time = scores[k].time;
 		let key = scores[k].key;
-		arrDataReceived.push({ name: name, time: time, key: key });
+		let level = scores[k].level;
+		arrDataReceived.push({ name: name, time: time, key: key, level: level });
 	}
 	drawScore(arrDataReceived);
 }

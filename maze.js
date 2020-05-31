@@ -2,6 +2,14 @@ const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
 const homeContainer = document.querySelector('.home-container');
+const joystickContainer = document.querySelector('.joystick');
+const joystickCheckBox = document.getElementById("js");
+
+const rightButton = document.querySelector('.right-button');
+const leftButton = document.querySelector('.left-button');
+const upButton = document.querySelector('.up-button');
+const downButton = document.querySelector('.down-button');
+
 const playerNameInput = document.querySelector('.player-name');
 const instructionContainer = document.querySelector('.instructions');
 
@@ -39,7 +47,14 @@ const ch = (canvas.height = 600);
 // PLayer information
 let playerName,
 	playerTime,
+	playerLevel = 1,
 	playerKey = '';
+
+// Game Sounds
+let gameoverSound;
+let nextLevelSound;
+let backgroundSound_1;
+let backgroundSound_2;
 
 let waitingTime = 4;
 let levelReached = 0;
@@ -62,7 +77,7 @@ let walkSpots = [];
 let playerPath = [];
 let teleporters = [];
 
-const levels = [ level_1, level_2, level_3, level_4, level_5, level_6, level_7, level_8, level_9, last_message ];
+const levels = [level_1, level_2, level_3, level_4, level_5, level_6, level_7, level_8, level_9, last_message];
 const levelsImage = [
 	'levels/level_1.png',
 	'levels/level_2.png',
@@ -78,11 +93,15 @@ const levelsImage = [
 
 window.addEventListener('load', () => {
 	let storagePlayerInfo = getPlayerInfoFromSystem();
-	if (storagePlayerInfo.length != 0) {
+	if (storagePlayerInfo.length !== 0) {
 		playerNameInput.value = storagePlayerInfo[0].name;
-		playerNameInput.setAttribute('disabled', '');
 		playerKey = storagePlayerInfo[0].key;
+		playerLevel = storagePlayerInfo[0].level;
 	}
+	gameoverSound = new Audio('sounds/gameover_sound.mp3');
+	nextLevelSound = new Audio('sounds/next_level_sound.mp3');
+	backgroundSound_1 = new Audio('sounds/background_sound_1.mp3');
+	backgroundSound_2 = new Audio('sounds/background_sound_2.mp3');
 });
 
 class GameEntity {
@@ -180,7 +199,7 @@ class Enemy extends GameEntity {
 				// if (pauseInput.checked) await new Promise((resolve) => setTimeout(resolve, 5000));
 				await waitFor((_) => !pauseInput.checked);
 
-				await new Promise((resolve) => setTimeout(resolve, 500));
+				await new Promise((resolve) => setTimeout(resolve, 450));
 
 				if (playerPath[coordinate]) {
 					this.x = playerPath[coordinate][0];
@@ -197,24 +216,15 @@ class Player extends GameEntity {
 		super(x, y, size);
 		this.fillColor = 'blue';
 		this.strokeColor = 'blue';
-		// this.size = this.size;
 		this.moveX;
 		this.moveY;
 		this.playerPos = [];
 	}
 
-	// draw = () => {
-	// 	c.beginPath();
-	// 	c.fillStyle = this.color;
-	// 	c.fillRect(this.x, this.y, this.playerSize, this.playerSize);
-	// 	c.fill();
-	// 	c.closePath();
-	// };
-
 	moveLeft = () => {
-		this.moveX = this.x + this.size;
+		this.moveX = this.x - this.size;
 		this.moveY = this.y;
-		this.playerPos[0] = [ this.moveX, this.moveY ];
+		this.playerPos[0] = [this.moveX, this.moveY];
 
 		// this allow the player move to a blank spot
 		walkSpots.forEach((spot, index) => {
@@ -224,9 +234,9 @@ class Player extends GameEntity {
 		});
 	};
 	moveRight = () => {
-		this.moveX = this.x - this.size;
+		this.moveX = this.x + this.size;
 		this.moveY = this.y;
-		this.playerPos[0] = [ this.moveX, this.moveY ];
+		this.playerPos[0] = [this.moveX, this.moveY];
 
 		// this allow the player move to a blank spot
 		walkSpots.forEach((spot, index) => {
@@ -238,7 +248,7 @@ class Player extends GameEntity {
 	moveUp = () => {
 		this.moveX = this.x;
 		this.moveY = this.y - this.size;
-		this.playerPos[0] = [ this.moveX, this.moveY ];
+		this.playerPos[0] = [this.moveX, this.moveY];
 
 		// this allow the player move to a blank spot
 		walkSpots.forEach((spot, index) => {
@@ -250,7 +260,7 @@ class Player extends GameEntity {
 	moveDown = () => {
 		this.moveX = this.x;
 		this.moveY = this.y + this.size;
-		this.playerPos[0] = [ this.moveX, this.moveY ];
+		this.playerPos[0] = [this.moveX, this.moveY];
 
 		// this allow the player move to a blank spot
 		walkSpots.forEach((spot, index) => {
@@ -265,8 +275,7 @@ class Player extends GameEntity {
 		this.y = other.y - this.size;
 	};
 }
-
-// This allow stop the for loop until pause on
+// This return a promise when a condiction is true
 function waitFor(condFunc) {
 	const poll = (resolve) => {
 		if (condFunc()) resolve();
@@ -287,13 +296,9 @@ async function followPath(self) {
 	}
 }
 
-async function saveScore() {
-	await waitFor((_) => !gameover);
-	console.log(playerNameInput.value);
-}
-
 function showSection(element) {
 	element.style.visibility = 'visible';
+
 }
 
 function hiddenSection(element) {
@@ -311,36 +316,36 @@ function timeScore() {
 		score = 0;
 	}
 	if (minute > 0) {
-		scoreDiv.innerText = `⏰ ${minute}m:${Math.floor(score)}s:${mm}`;
-		gameoverTimeMessage.innerHTML = `<span>⏰</span> ${minute}m:${Math.floor(score)}s:${mm}`;
+		scoreDiv.innerText = `⏰ ${minute}:${Math.floor(score)}:${mm}`;
+		gameoverTimeMessage.innerHTML = `<span>⏰</span> ${minute}:${Math.floor(score)}:${mm}`;
 	} else {
-		scoreDiv.innerText = `⏰ ${Math.floor(score)}s:${mm}mm`;
-		gameoverTimeMessage.innerHTML = `<span>⏰</span> ${Math.floor(score)}s:${mm}mm`;
+		scoreDiv.innerText = `⏰ ${Math.floor(score)}:${mm}`;
+		gameoverTimeMessage.innerHTML = `<span>⏰</span> ${Math.floor(score)}:${mm}`;
 	}
-	playerTime = `${minute}m:${Math.floor(score)}s`;
+	playerTime = `${minute}:${Math.floor(score)} `;
 
 	gameoverLevelMessage.innerHTML = `<span>Level</span> ${levelReached + 1}`;
 }
 
 function toggleControl(e) {
 	if (e.keyCode == '37' && gameState && !pauseInput.checked) {
-		player.moveRight();
-		playerPath.push([ player.x, player.y ]);
+		player.moveLeft();
+		playerPath.push([player.x, player.y]);
 	}
 
 	if (e.keyCode == '39' && gameState && !pauseInput.checked) {
-		player.moveLeft();
-		playerPath.push([ player.x, player.y ]);
+		player.moveRight();
+		playerPath.push([player.x, player.y]);
 	}
 
 	if (e.keyCode == '38' && gameState && !pauseInput.checked) {
 		player.moveUp();
-		playerPath.push([ player.x, player.y ]);
+		playerPath.push([player.x, player.y]);
 	}
 
 	if (e.keyCode == '40' && gameState && !pauseInput.checked) {
 		player.moveDown();
-		playerPath.push([ player.x, player.y ]);
+		playerPath.push([player.x, player.y]);
 	}
 }
 
@@ -365,11 +370,11 @@ function drawMaze(level) {
 				// walls.forEach((wall) => wall.draw());
 			}
 			if (block === '.') {
-				walkSpots.push([ x_cor, y_cor ]);
+				walkSpots.push([x_cor, y_cor]);
 			}
 			if (block === 'P') {
 				player = new Player(x_cor, y_cor);
-				playerPath.push([ x_cor, y_cor ]);
+				playerPath.push([x_cor, y_cor]);
 				player.draw();
 			}
 			if (block === 'E') {
@@ -418,7 +423,9 @@ function Countdown() {
 		clearInterval(countTimer);
 		changeGameState();
 		hiddenSection(timerContainer);
+		playBackgroundSound()
 	}
+
 	if (gameState && waitingTime === 0) {
 		document.addEventListener('keyup', toggleControl);
 		followTimer = setTimeout(() => enemy.followPath(), 3000);
@@ -429,37 +436,45 @@ function Countdown() {
 
 function nextLevel(currectLevel = 0) {
 	canvas.style.background = `url(${levelsImage[currectLevel]}) no-repeat`;
-	savePlayerInfoToLocalstorage(playerData)
+
+	if (currectLevel == 1) {
+		let storagePlayerInfo = getPlayerInfoFromSystem();
+		if (storagePlayerInfo.length !== 0) {
+			playerNameInput.value = storagePlayerInfo[0].name;
+			playerKey = storagePlayerInfo[0].key;
+			playerLevel = storagePlayerInfo[0].level;
+		}
+	}
+
 	if (currectLevel > 0) {
+		nextLevelSound.currentTime = 0;
+		nextLevelSound.play();
+
 		waitingTime = 4;
 		timeDiv.innerText = '';
+
+		if (getPlayerInfoFromSystem().length !== 0) {
+			let currectTime = parseInt(playerData.time.split(":").join(""));
+			let currectLevel = playerData.level;
+
+			let storageTime = parseInt(getPlayerInfoFromSystem()[0].time.split(":").join(""));
+			let storageLevel = getPlayerInfoFromSystem()[0].level;
+
+			if (currectLevel > storageLevel) {
+				saveDataToFirebase(playerData)
+			} else if (currectLevel === storageLevel && currectTime < storageTime) {
+				saveDataToFirebase(playerData)
+			}
+
+		} else {
+			saveDataToFirebase(playerData);
+		}
 
 		showSection(timerContainer);
 		startTime();
 	}
-	if (currectLevel === levels.length - 1) {
-		if (getPlayerInfoFromSystem().length !== 0) {
-			let currectTime = playerData.time.split(':');
-			let storageTime = getPlayerInfoFromSystem()[0].time.split(':');
-			let currecttime = '';
-			let storagetime = '';
 
-			for (let i = 0; i < currectTime.length; i++) {
-				currecttime += parseInt(currectTime[i]);
-			}
-			for (let i = 0; i < storageTime.length; i++) {
-				storagetime += parseInt(storageTime[i]);
-			}
-			console.log(currecttime < storagetime);
-			if (currecttime < storagetime) saveDataToFirebase(playerData);
-			alert('En 10 segundo volveras a home!.\n Terminaste el juego, Ahora \n trata de romper tu record(time)');
-			setTimeout(() => window.location.reload(), 10000);
-		} else {
-			saveDataToFirebase(playerData);
-			alert('En 10 segundo volveras a home!.\n Terminaste el juego, Ahora \n trata de romper tu record(time)');
-			setTimeout(() => window.location.reload(), 10000);
-		}
-	}
+
 	drawMaze(levels[currectLevel]);
 }
 
@@ -491,6 +506,27 @@ function animateTeleporter(teleporter) {
 		teleporter.src = 'levels/hole2.png';
 	}
 }
+function playBackgroundSound() {
+	if (Math.random() > 0.5) {
+		backgroundSound_2.pause();
+		backgroundSound_1.currectTime = 0;
+		backgroundSound_1.play();
+		backgroundSound_1.loop = true;
+	} else {
+		backgroundSound_1.pause();
+		backgroundSound_2.currectTime = 0;
+		backgroundSound_2.play();
+		backgroundSound_2.loop = true;
+	}
+}
+function pauseBackgroundSound() {
+	if (backgroundSound_1) backgroundSound_1.pause()
+	if (backgroundSound_2) backgroundSound_2.pause()
+}
+function detectMob() {
+	return ((window.innerWidth <= 800) && (window.innerHeight <= 800));
+}
+
 function gameLoop() {
 	requestAnimationFrame(gameLoop);
 	if (!pauseInput.checked) {
@@ -502,12 +538,6 @@ function gameLoop() {
 			player.draw();
 			door.draw();
 			enemy.draw();
-
-			playerData = {
-				name: playerName,
-				time: playerTime,
-				key: playerKey
-			};
 
 			if (door.isCollision(player)) {
 				levelReached = levelReached + 1;
@@ -523,19 +553,35 @@ function gameLoop() {
 				changeGameState();
 				setTimeout(nextLevel(levelReached), 400);
 			}
+
 			if (enemy.isCollision(player) && !gameover) {
 				setTimeout(() => {
 					showSection(gameoverContainer);
+					hiddenSection(joystickContainer);
 					gameoverSpan.classList.add('animate-over');
 					gameoverSpan.addEventListener('animationend', () => {
 						gameoverSpan.classList.remove('animate-over');
 					});
 
-					console.log('I have catched you');
+					pauseBackgroundSound()
+
+					gameoverSound.currentTime = 0;
+					gameoverSound.play();
+
 					gameover = true;
 					gameState = false;
 				}, 100);
+
+
 			}
+
+			playerData = {
+				name: playerName,
+				time: playerTime,
+				level: levelReached,
+				key: playerKey
+			};
+
 			if (levelReached == 4 || levelReached == 8) {
 				if (teleporter_1 || teleporter_2 || teleporter_2) {
 					teleporter_1.drawT();
@@ -556,9 +602,14 @@ function gameLoop() {
 					if (teleporter_2.isCollision(enemy)) enemy.teleport(teleporter_3);
 				}
 			}
+
+			backgroundSound_1.volume = 1;
+			backgroundSound_2.volume = 1;
 		}
 	} else {
 		showSection(pauseSection);
+		backgroundSound_1.volume = 0.3;
+		backgroundSound_2.volume = 0.3;
 	}
 }
 
@@ -566,16 +617,24 @@ playButton.addEventListener('click', () => {
 	playerName = playerNameInput.value;
 	if (playerName == '') return alert('Necesitas Poner Tu Nombre!');
 	hiddenSection(homeContainer);
+	showSection(canvas);
 	showSection(pauseContainer);
 	showSection(timerContainer);
 	showSection(speedrunContainer);
+
+	if (detectMob() && joystickCheckBox.checked) {
+		showSection(joystickContainer);
+	}
+
 	startGame();
 	startTime();
+
 	gameLoop();
 });
 
 restartButton.addEventListener('click', () => {
 	hiddenSection(gameoverContainer);
+	showSection(joystickContainer);
 	restartGame();
 });
 

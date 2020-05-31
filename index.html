@@ -22,7 +22,11 @@
 
 <body>
     <div class="container">
+        <canvas></canvas>
+
         <div class="home-container">
+            <input type="checkbox" name='js' id="js">
+            <label for="js" class="js">Joystick</label>
             <h1 class="title"><span>M</span>aze<span>R</span>un</h1>
             <input type="text" class="player-name" placeholder="Escribe Tu Nombre">
             <button class="play-button">PLAY</button>
@@ -60,8 +64,8 @@
             <div class="swipe-message-1">Desliza en direccion a donde te quieres mover.</div>
             <button class="go-home-button">➡️HOME</button>
         </div>
-        <canvas></canvas>
     </div>
+
 
     <!-- SCORE TABLE -->
     <div class="table-board" id="tableBoard">
@@ -73,6 +77,7 @@
                         <th>Place</th>
                         <th>Name</th>
                         <th>Time</th>
+                        <th>Level</th>
                     </tr>
                 </thead>
             </thead>
@@ -80,71 +85,33 @@
             <tbody>
 
             </tbody>
-            <!-- <tbody>
-            <tr>
-                <td class="1st🥇" style="color: goldenrod;">1st🥇</td>
-                <td class="1st🥇" style="color: goldenrod;">8900</td>
-                <td class="1st🥇" style="color: goldenrod;">Luis</td>
-            </tr>
-            <tr>
-                <td class="2nd🥈" style="color: black;">2nd🥈</td>
-                <td class="2nd🥈" style="color: black;">5800</td>
-                <td class="2nd🥈" style="color: black;">KM</td>
-            </tr>
-            <tr>
-                <td class="3th🥉" style="color: orangered;">3th🥉</td>
-                <td class="3th🥉" style="color: orangered;">4200</td>
-                <td class="3th🥉" style="color: orangered;">xzc</td>
-            </tr>
-            <tr>
-                <td class="4th🏅" style="color: green;">4th🏅</td>
-                <td class="4th🏅" style="color: green;">4000</td>
-                <td class="4th🏅" style="color: green;">asddsa</td>
-            </tr>
-            <tr>
-                <td class="5th🏅" style="color: green;">5th🏅</td>
-                <td class="5th🏅" style="color: green;">3800</td>
-                <td class="5th🏅" style="color: green;">ad</td>
-            </tr>
-            <tr>
-                <td class="6th🏅" style="color: green;">6th🏅</td>
-                <td class="6th🏅" style="color: green;">3800</td>
-                <td class="6th🏅" style="color: green;">ad</td>
-            </tr>
-            <tr>
-                <td class="7th🏅" style="color: green;">7th🏅</td>
-                <td class="7th🏅" style="color: green;">3800</td>
-                <td class="7th🏅" style="color: green;">ad</td>
-            </tr>
-            <tr>
-                <td class="8th🏅" style="color: green;">8th🏅</td>
-                <td class="8th🏅" style="color: green;">3800</td>
-                <td class="8th🏅" style="color: green;">ad</td>
-            </tr>
-            <tr>
-                <td class="9th🏅" style="color: green;">9th🏅</td>
-                <td class="9th🏅" style="color: green;">3800</td>
-                <td class="9th🏅" style="color: green;">ad</td>
-            </tr>
-        </tbody> -->
         </table>
+    </div>
+
+    <div class="joystick">
+        <button class="right-button">▶</button>
+        <button class="left-button">◀</button>
+        <button class="down-button">▶</button>
+        <button class="up-button">◀</button>
     </div>
 
     <span class="autor">Made with ❤️ by Lam09 </span>
 
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            console.log("Will the sevice worker register?");
+
+            navigator.serviceWorker.register("service-worker.js").then(function (reg) {
+                console.log("Yes, it did.");
+            }).catch(function (err) {
+                console.log("No it didn't. This happended:", err)
+            });
+
+        }
+    </script>
 </body>
 
-<script>
-    if ('serviceWorker' in navigator) {
-        console.log("Will the sevice worker register?");
 
-        navigator.serviceWorker.register("service-worker.js").then(function (reg) {
-            console.log("Yes, it did.");
-        }).catch(function (err) {
-            console.log("No it didn't. This happended:", err)
-        });
-
-    }
-</script>
 
 </html>
