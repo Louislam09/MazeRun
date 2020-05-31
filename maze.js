@@ -429,7 +429,7 @@ function Countdown() {
 
 function nextLevel(currectLevel = 0) {
 	canvas.style.background = `url(${levelsImage[currectLevel]}) no-repeat`;
-
+	savePlayerInfoToLocalstorage(playerData)
 	if (currectLevel > 0) {
 		waitingTime = 4;
 		timeDiv.innerText = '';
