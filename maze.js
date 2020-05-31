@@ -429,7 +429,7 @@ function Countdown() {
 
 function nextLevel(currectLevel = 0) {
 	canvas.style.background = `url(${levelsImage[currectLevel]}) no-repeat`;
-
+	savePlayerInfoToLocalstorage(playerData)
 	if (currectLevel > 0) {
 		waitingTime = 4;
 		timeDiv.innerText = '';
@@ -564,7 +564,7 @@ function gameLoop() {
 
 playButton.addEventListener('click', () => {
 	playerName = playerNameInput.value;
-	if (playerName == '') return alert('hoasdho');
+	if (playerName == '') return alert('Necesitas Poner Tu Nombre!');
 	hiddenSection(homeContainer);
 	showSection(pauseContainer);
 	showSection(timerContainer);
