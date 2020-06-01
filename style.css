@@ -544,18 +544,16 @@ body {
 
 .joystick{
 	position: absolute;
-	width: 400px;
+	width: 300px;
 	height: 200px;
-	left: 15%;
-	top: 90%;
+	left: 150px;
+	top: 75%;
 	transform: traslate(-50%,-100%)
 	border: 8px solid red;
 	border-radius: 50px;
-	background: rgba(0,0,55,0.5);
+	background: transparent;
 	visibility: hidden;
 }
-
-
 .joystick button{
 	width:80px;
 	height:80px;
@@ -579,12 +577,12 @@ body {
 
 .joystick .left-button{
 	position: absolute;
-	left: -40%;
+	left: -30%;
 	top: 30%;
 }
 .joystick .right-button{
 	position: absolute;
-	left: 40%;
+	left: 30%;
 	top: 30%;
 }
 .joystick .up-button{
@@ -599,7 +597,6 @@ body {
 	top: 65%;
 	transform:rotate(90deg)
 }
-
 .autor {
 	position: fixed;
 	bottom: 1%;
@@ -609,9 +606,6 @@ body {
 	padding: 10px;
 	font-weight: bolder;
 }
-
-
-
 
 /* TABLE CSS   */
 .table-board {
@@ -749,7 +743,30 @@ tr:hover td {
 	}
 	.container {
 		position: absolute;
-		top: 50%;
+		top: 48%;
+		left: 55%;
 		transform: translate(-50%, -50%);
+	}
+	.joystick{
+		transform: scale(0.6) translateY(20%);
+	}
+	/* img{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);    
+		z-index: -1;
+	} */
+
+	.table-board {
+	position: absolute;
+	width: 600px;
+	height: 600px;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	margin-left: -107%;
+	transition: 2s;
+	visibility: hidden;
 	}
 }

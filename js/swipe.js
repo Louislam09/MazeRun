@@ -3,12 +3,16 @@ let startY = 0;
 let endX = 0;
 let endY = 0;
 
-
 document.addEventListener('mousedown', lock);
 document.addEventListener('touchstart', lock);
 
 document.addEventListener('mouseup', release);
 document.addEventListener('touchend', release);
+
+leftButton.addEventListener('click', goLeft);
+rightButton.addEventListener('click', goRight);
+upButton.addEventListener('click', goUp);
+downButton.addEventListener('click', goDown);
 
 function lock(event) {
 	startX = event.type === 'mousedown' ? event.screenX : event.changedTouches[0].screenX;
@@ -21,6 +25,7 @@ function release(event) {
 	endY = event.type === 'mouseup' ? event.screenY : event.changedTouches[0].screenY;
 	SwipeDirrectionChecker();
 }
+
 function SwipeDirrectionChecker() {
 	if (gameState && waitingTime === 0 && !joystickCheckBox.checked) {
 		if (Math.abs(endX - startX) > 50)
@@ -45,25 +50,30 @@ function SwipeDirrectionChecker() {
 	}
 }
 
-leftButton.addEventListener('click', goLeft)
-rightButton.addEventListener('click', goRight)
-upButton.addEventListener('click', goUp)
-downButton.addEventListener('click', goDown)
-
-
 function goUp() {
-	player.moveUp();
-	playerPath.push([player.x, player.y]);
+	if (gameState && waitingTime === 0) {
+		player.moveUp();
+		playerPath.push([player.x, player.y]);
+	}
 }
+
 function goDown() {
-	player.moveDown();
-	playerPath.push([player.x, player.y]);
+	if (gameState && waitingTime === 0) {
+		player.moveDown();
+		playerPath.push([player.x, player.y]);
+	}
 }
+
 function goLeft() {
-	player.moveLeft();
-	playerPath.push([player.x, player.y]);
+	if (gameState && waitingTime === 0) {
+		player.moveLeft();
+		playerPath.push([player.x, player.y]);
+	}
 }
+
 function goRight() {
-	player.moveRight();
-	playerPath.push([player.x, player.y]);
+	if (gameState && waitingTime === 0) {
+		player.moveRight();
+		playerPath.push([player.x, player.y]);
+	}
 }

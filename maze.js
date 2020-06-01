@@ -47,8 +47,7 @@ const ch = (canvas.height = 600);
 // PLayer information
 let playerName,
 	playerTime,
-	playerLevel = 1,
-	playerKey = '';
+	playerKey;
 
 // Game Sounds
 let gameoverSound;
@@ -79,25 +78,31 @@ let teleporters = [];
 
 const levels = [level_1, level_2, level_3, level_4, level_5, level_6, level_7, level_8, level_9, last_message];
 const levelsImage = [
-	'levels/level_1.png',
-	'levels/level_2.png',
-	'levels/level_3.png',
-	'levels/level_4.png',
-	'levels/level_5.png',
-	'levels/level_6.png',
-	'levels/level_7.png',
-	'levels/level_8.png',
-	'levels/level_9.png',
-	'levels/last_message.png'
+	'url(levels/level_1.png) no-repeat',
+	'url(levels/level_2.png) no-repeat',
+	'url(levels/level_3.png) no-repeat',
+	'url(levels/level_4.png) no-repeat',
+	'url(levels/level_5.png) no-repeat',
+	'url(levels/level_6.png) no-repeat',
+	'url(levels/level_7.png) no-repeat',
+	'url(levels/level_8.png) no-repeat',
+	'url(levels/level_9.png) no-repeat',
+	'url(levels/last_message.png) no-repeat'
 ];
+
+// let level2 = new Image(600, 600);
+// level2.src = "levels/level_1.png"
+
+// document.querySelector('.container').appendChild(level2)
+
 
 window.addEventListener('load', () => {
 	let storagePlayerInfo = getPlayerInfoFromSystem();
 	if (storagePlayerInfo.length !== 0) {
 		playerNameInput.value = storagePlayerInfo[0].name;
 		playerKey = storagePlayerInfo[0].key;
-		playerLevel = storagePlayerInfo[0].level;
 	}
+
 	gameoverSound = new Audio('sounds/gameover_sound.mp3');
 	nextLevelSound = new Audio('sounds/next_level_sound.mp3');
 	backgroundSound_1 = new Audio('sounds/background_sound_1.mp3');
@@ -199,7 +204,7 @@ class Enemy extends GameEntity {
 				// if (pauseInput.checked) await new Promise((resolve) => setTimeout(resolve, 5000));
 				await waitFor((_) => !pauseInput.checked);
 
-				await new Promise((resolve) => setTimeout(resolve, 350));
+				await new Promise((resolve) => setTimeout(resolve, 470));
 
 				if (playerPath[coordinate]) {
 					this.x = playerPath[coordinate][0];
@@ -283,7 +288,6 @@ function waitFor(condFunc) {
 	};
 	return new Promise(poll);
 }
-
 async function followPath(self) {
 	for (let coordinate = 0; coordinate < playerPath.length; coordinate++) {
 		// if (!pauseInput.checked) await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -295,16 +299,13 @@ async function followPath(self) {
 		playerPath.splice(coordinate, 1);
 	}
 }
-
 function showSection(element) {
 	element.style.visibility = 'visible';
 
 }
-
 function hiddenSection(element) {
 	element.style.visibility = 'hidden';
 }
-
 function timeScore() {
 	let time = new Date();
 	let mm = time.getMilliseconds();
@@ -326,7 +327,6 @@ function timeScore() {
 
 	gameoverLevelMessage.innerHTML = `<span>Level</span> ${levelReached + 1}`;
 }
-
 function toggleControl(e) {
 	if (e.keyCode == '37' && gameState && !pauseInput.checked) {
 		player.moveLeft();
@@ -348,7 +348,6 @@ function toggleControl(e) {
 		playerPath.push([player.x, player.y]);
 	}
 }
-
 function drawMaze(level) {
 	let block;
 	for (const y in level) {
@@ -402,15 +401,12 @@ function drawMaze(level) {
 	}
 }
 // drawMaze(levels[8]);
-
 function changeGameState() {
 	gameState = !gameState;
 }
-
 function startTime() {
 	countTimer = setInterval(Countdown, 1000);
 }
-
 function Countdown() {
 	--waitingTime;
 	timeDiv.innerText = waitingTime;
@@ -435,25 +431,19 @@ function Countdown() {
 		setTimeout(() => clearTimeout(followTimer), 3000);
 	}
 }
-
 function nextLevel(currectLevel = 0) {
-	canvas.style.background = `url(${levelsImage[currectLevel]}) no-repeat`;
+	canvas.style.background = levelsImage[currectLevel];
 
-	if (currectLevel == 1) {
-		let storagePlayerInfo = getPlayerInfoFromSystem();
-		if (storagePlayerInfo.length !== 0) {
-			playerNameInput.value = storagePlayerInfo[0].name;
-			playerKey = storagePlayerInfo[0].key;
-			playerLevel = storagePlayerInfo[0].level;
-		}
-	}
+	playerData = {
+		name: playerName,
+		time: playerTime,
+		level: levelReached,
+		key: playerKey
+	};
 
 	if (currectLevel > 0) {
 		nextLevelSound.currentTime = 0;
 		nextLevelSound.play();
-
-		waitingTime = 4;
-		timeDiv.innerText = '';
 
 		if (getPlayerInfoFromSystem().length !== 0) {
 			let currectTime = parseInt(playerData.time.split(":").join(""));
@@ -466,20 +456,23 @@ function nextLevel(currectLevel = 0) {
 				saveDataToFirebase(playerData)
 			} else if (currectLevel === storageLevel && currectTime < storageTime) {
 				saveDataToFirebase(playerData)
+			} else {
+				console.log("You have not reached your storage level yet, Continue playing...!")
 			}
 
 		} else {
 			saveDataToFirebase(playerData);
 		}
 
+		timeDiv.innerText = '';
 		showSection(timerContainer);
+
+		waitingTime = 4;
 		startTime();
 	}
 
-
 	drawMaze(levels[currectLevel]);
 }
-
 function startGame() {
 	nextLevel();
 }
@@ -528,12 +521,11 @@ function pauseBackgroundSound() {
 function detectMob() {
 	return ((window.innerWidth <= 800) && (window.innerHeight <= 800));
 }
-
 function gameLoop() {
 	requestAnimationFrame(gameLoop);
 	if (!pauseInput.checked) {
 		hiddenSection(pauseSection);
-		c.clearRect(0, 0, cw, ch); // Esto limpia el rastro del circulo cada vez que se ejecuta la funcion.
+		c.clearRect(0, 0, cw, ch);
 
 		if (levelReached !== 9) {
 			if (gameState) timeScore();
@@ -573,16 +565,7 @@ function gameLoop() {
 					gameover = true;
 					gameState = false;
 				}, 100);
-
-
 			}
-
-			playerData = {
-				name: playerName,
-				time: playerTime,
-				level: levelReached,
-				key: playerKey
-			};
 
 			if (levelReached == 4 || levelReached == 8) {
 				if (teleporter_1 || teleporter_2 || teleporter_2) {
@@ -621,8 +604,8 @@ playButton.addEventListener('click', () => {
 	hiddenSection(homeContainer);
 	showSection(canvas);
 	showSection(pauseContainer);
-	showSection(timerContainer);
 	showSection(speedrunContainer);
+	showSection(timerContainer);
 
 	if (detectMob() && joystickCheckBox.checked) {
 		showSection(joystickContainer);
@@ -636,7 +619,11 @@ playButton.addEventListener('click', () => {
 
 restartButton.addEventListener('click', () => {
 	hiddenSection(gameoverContainer);
-	showSection(joystickContainer);
+
+	if (detectMob() && joystickCheckBox.checked) {
+		showSection(joystickContainer);
+	}
+
 	restartGame();
 });
 

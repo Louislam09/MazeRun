@@ -1,7 +1,8 @@
 let playerData = {
-	name: '',
-	time: '',
-	key: ''
+	name: undefined,
+	time: undefined,
+	level: undefined,
+	key: undefined
 };
 var arrDataReceived;
 
@@ -29,13 +30,13 @@ function startGettingData() {
 startGettingData();
 
 function saveDataToFirebase(data) {
-	if (playerKey == '') {
+	if (data.key === undefined) {
 		let result = ref.push(data);
-		if (data.key == '') data.key = result.key;
+		data.key = result.key;
+		playerKey = data.key;
 	} else {
-		database.ref('scores/' + playerKey).set(data);
+		database.ref('scores/' + data.key).set(data);
 	}
-
 	savePlayerInfoToLocalstorage(data);
 }
 
