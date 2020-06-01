@@ -199,7 +199,7 @@ class Enemy extends GameEntity {
 				// if (pauseInput.checked) await new Promise((resolve) => setTimeout(resolve, 5000));
 				await waitFor((_) => !pauseInput.checked);
 
-				await new Promise((resolve) => setTimeout(resolve, 450));
+				await new Promise((resolve) => setTimeout(resolve, 350));
 
 				if (playerPath[coordinate]) {
 					this.x = playerPath[coordinate][0];
@@ -416,6 +416,8 @@ function Countdown() {
 	timeDiv.innerText = waitingTime;
 	if (levelReached === levels.length - 1) {
 		levelDiv.innerText = `🎊🎉CONGRATULATION🎊🎉GAME COMPLETED🎊🎉`;
+		alert('En 10 segundo volveras a home!.\n Terminaste el juego, Ahora \n trata de romper tu record(time)');
+		setTimeout(() => window.location.reload(), 10000);
 	} else {
 		levelDiv.innerText = `Level ${levelReached + 1}`;
 	}
