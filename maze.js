@@ -439,7 +439,7 @@ function Countdown() {
 }
 function nextLevel(currectLevel = 0) {
 	// canvas.style.background = levelsImage[currectLevel];
-	canvas.style.background = `url(levels/levels.png)`;
+	canvas.style.background = `url(./levels/levels.png)`;
 	if (currectLevel === 0) canvas.style.backgroundPosition = `0px 0px`;
 
 	playerData = {
