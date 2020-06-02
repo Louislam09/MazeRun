@@ -46,8 +46,8 @@ function saveDataToFirebase(data) {
 		data.key = result.key;
 		playerKey = data.key;
 	} else {
-		let currectTime = parseInt(data.time.split(":").join(""));
-		let currectLevel = data.level;
+		let currectTime = parseInt(playerTime.split(":").join(""));
+		let currectLevel = playerLevel;
 
 		let storageTime = parseInt(storageArr[0].time.split(":").join(""));
 		let storageLevel = storageArr[0].level;
