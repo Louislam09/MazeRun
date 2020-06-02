@@ -96,15 +96,6 @@ const levelsImage = [
 ];
 let width = 0;
 
-<<<<<<< HEAD
-=======
-// let level2 = new Image(600, 600);
-// level2.src = "levels/level_1.png"
-
-// document.querySelector('.container').appendChild(level2)
-
-alert(getPlayerInfoFromSystem()[0].name)
->>>>>>> e135cc214b98224608f657f4c0ed8b2286d5671d
 window.addEventListener('load', () => {
 	let storagePlayerInfo = getPlayerInfoFromSystem();
 	if (storagePlayerInfo.length !== 0) {
