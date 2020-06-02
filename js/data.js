@@ -6,6 +6,8 @@ let playerData = {
 };
 var arrDataReceived;
 
+alert(`${getPlayerInfoFromSystem()[0]}`)
+
 // Your web app's Firebase configuration
 var firebaseConfig = {
 	apiKey: 'AIzaSyCW4haQZy7DM2QZnw40qzdnlkqYs8xCclE',
