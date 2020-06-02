@@ -82,6 +82,7 @@ let teleporters = [];
 
 const levels = [level_1, level_2, level_3, level_4, level_5, level_6, level_7, level_8, level_9, last_message];
 const levelsImage = [
+	'url(levels/levels.png) no-repeat',
 	'url(levels/level_1.png) no-repeat',
 	'url(levels/level_2.png) no-repeat',
 	'url(levels/level_3.png) no-repeat',
@@ -438,8 +439,7 @@ function Countdown() {
 	}
 }
 function nextLevel(currectLevel = 0) {
-	// canvas.style.background = levelsImage[currectLevel];
-	canvas.style.background = `url(./levels/levels.png)`;
+	canvas.style.background = levelsImage[0];
 	if (currectLevel === 0) canvas.style.backgroundPosition = `0px 0px`;
 
 	playerData = {
