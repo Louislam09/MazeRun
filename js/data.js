@@ -6,8 +6,6 @@ let playerData = {
 };
 var arrDataReceived;
 
-
-
 // Your web app's Firebase configuration
 var firebaseConfig = {
 	apiKey: 'AIzaSyCW4haQZy7DM2QZnw40qzdnlkqYs8xCclE',
@@ -32,16 +30,36 @@ function startGettingData() {
 startGettingData();
 
 function saveDataToFirebase(data) {
+	savePlayerInfoToLocalstorage(data);
+
+	let storageArr = [];
+
+	arrDataReceived.forEach(arr => {
+		if (arr.key === data.key) {
+			storageArr.push(arr)
+			return
+		}
+	})
+
 	if (data.key === undefined) {
-		alert("has not key")
 		let result = ref.push(data);
 		data.key = result.key;
 		playerKey = data.key;
 	} else {
-		alert("has key")
-		database.ref('scores/' + data.key).set(data);
+		let currectTime = parseInt(data.time.split(":").join(""));
+		let currectLevel = data.level;
+
+		let storageTime = parseInt(storageArr[0].time.split(":").join(""));
+		let storageLevel = storageArr[0].level;
+
+		if (currectLevel > storageLevel) {
+			database.ref('scores/' + data.key).set(data);
+		} else if (currectLevel === storageLevel && currectTime < storageTime) {
+			database.ref('scores/' + data.key).set(data);
+		} else {
+			console.log("You have not reached your storage level yet, Continue playing...!")
+		}
 	}
-	savePlayerInfoToLocalstorage(data);
 }
 
 function gotData(data) {
