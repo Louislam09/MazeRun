@@ -27,7 +27,7 @@ body {
 .container canvas {
 	border: 2px solid transparent;	
 	border-radius: 5px;
-	background: url(levels/levels.png);
+	background: url(levels.png);
 	background-position: 0px 0px; 
 }
 .animate-canvas {
