@@ -16,9 +16,19 @@ body {
 	top: 53%;
 	transform: translate(-50%, -50%);
 }
+.container .game-container{
+	position: absolute;
+	left: 50%;
+	top: 53%;
+	transform: translate(-50%, -50%);
+	z-index: -1;
+	visibility: hidden;
+}
 .container canvas {
 	border: 2px solid transparent;	
 	border-radius: 5px;
+	background: url(levels/levels.png);
+	background-position: 0px 0px; 
 }
 .animate-canvas {
 	animation: twist .3s;
@@ -34,9 +44,9 @@ body {
 		/* transform-origin: bottom left; */
 	}
 }
-.container .pause-container {
+.container .game-container .pause-container {
 	position: absolute;
-	left: 80%;
+	left: 82%;
 	top: -7%;
 	font-size: 2em;
 	color: white;
@@ -69,7 +79,22 @@ body {
 	background: rgba(255, 255, 255, 0.192);
 	border: 1px solid lime;
 }
-.container .speedrun {
+.container .game-container .sound-container {
+	position: absolute;
+	left: 5%;
+	top: -7%;
+	font-size: 2em;
+	color: white;
+	padding: 0px 10px;
+	transform: translate(-50%);
+	background: rgba(255, 255, 255, 0.192);
+	border: 1px solid white;
+}
+.sound-container input {
+	display: none;
+}
+
+.container .game-container .speedrun {
 	position: absolute;
 	left: 50%;
 	top: -7%;
@@ -613,7 +638,7 @@ body {
 	width: 600px;
 	height: 600px;
 	left: 50%;
-	top: 52%;
+	top: 53%;
 	transform: translate(-50%, -50%);
 	margin-left: -107%;
 	transition: 2s;
@@ -744,29 +769,57 @@ tr:hover td {
 	.container {
 		position: absolute;
 		top: 48%;
-		left: 55%;
+		left: 50%;
 		transform: translate(-50%, -50%);
 	}
+	.container .game-container{
+		position: absolute;
+		left: 50%;
+		top: 53%;
+		transform: translate(-50%, -50%);
+		z-index: -1;
+		visibility: hidden;
+	}
+	.container .game-container .pause-container {
+	position: absolute;
+	left: 82%;
+	top: -7%;
+	font-size: 2em;
+	color: white;
+	padding: 0px 10px;
+	transform: translate(-50%);
+	background: rgba(255, 255, 255, 0.192);
+	border: 1px solid white;
+	visibility: hidden;
+}
+	.container .game-container .speedrun {
+	position: absolute;
+	left: 50%;
+	top: -7%;
+	font-size: 2em;
+	font-weight: bolder;
+	color: white;
+	padding: 0px 10px;
+	transform: translate(-50%);
+	border: 1px solid white;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	background: rgba(255, 255, 255, 0.192);
+	visibility: hidden;
+}
 	.joystick{
 		transform: scale(0.6) translateY(20%);
 	}
-	/* img{
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);    
-		z-index: -1;
-	} */
 
 	.table-board {
-	position: absolute;
-	width: 600px;
-	height: 600px;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	margin-left: -107%;
-	transition: 2s;
-	visibility: hidden;
+		position: absolute;
+		width: 600px;
+		height: 600px;
+		top: 48%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		margin-left: -107%;
+		transition: 2s;
+		visibility: hidden;
 	}
 }

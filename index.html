@@ -22,7 +22,6 @@
 
 <body>
     <div class="container">
-        <canvas></canvas>
 
         <div class="home-container">
             <input type="checkbox" name='js' id="js">
@@ -33,13 +32,13 @@
             <button class="training-button">TRAINING</button>
             <button class="scoreboard-button">ScoreBoard</button>
         </div>
-        <div class="speedrun">
+        <!-- <div class="speedrun">
             <div class="score"></div>
         </div>
         <div class="pause-container">
             <input type="checkbox" name="pause" id="pause-input">
             <label for="pause-input">Pause</label>
-        </div>
+        </div> -->
         <div class="timer">
             <div class="level"></div>
             <div class="time"></div>
@@ -64,6 +63,22 @@
             <div class="swipe-message-1">Desliza en direccion a donde te quieres mover.</div>
             <button class="go-home-button">➡️HOME</button>
         </div>
+
+        <div class="game-container">
+            <canvas></canvas>
+            <div class="speedrun">
+                <div class="score"></div>
+            </div>
+            <div class="pause-container">
+                <input type="checkbox" name="pause" id="pause-input">
+                <label for="pause-input">Pause</label>
+            </div>
+            <div class="sound-container">
+                <input type="checkbox" name="sound" id="sound-input">
+                <label for="sound-input" class="sound-label">🔊</label>
+            </div>
+        </div>
+
     </div>
 
 

@@ -1,3 +1,4 @@
+const gameContainer = document.querySelector('.game-container');
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
@@ -25,6 +26,9 @@ const pauseInput = document.getElementById('pause-input');
 
 const speedrunContainer = document.querySelector('.speedrun');
 const scoreDiv = document.querySelector('.score');
+
+const soundLabel = document.querySelector('.sound-label');
+const soundInput = document.getElementById('sound-input');
 
 const gameoverContainer = document.querySelector('.gameover');
 const gameoverSpan = document.querySelector('.gameover-span');
@@ -89,6 +93,7 @@ const levelsImage = [
 	'url(levels/level_9.png) no-repeat',
 	'url(levels/last_message.png) no-repeat'
 ];
+let width = 0;
 
 // let level2 = new Image(600, 600);
 // level2.src = "levels/level_1.png"
@@ -412,7 +417,8 @@ function Countdown() {
 	timeDiv.innerText = waitingTime;
 	if (levelReached === levels.length - 1) {
 		levelDiv.innerText = `🎊🎉CONGRATULATION🎊🎉GAME COMPLETED🎊🎉`;
-		alert('En 10 segundo volveras a home!.\n Terminaste el juego, Ahora \n trata de romper tu record(time)');
+
+		setTimeout(() => alert('En 10 segundo volveras a home!.\n Terminaste el juego, Ahora \n trata de romper tu record(time)'), 4000);
 		setTimeout(() => window.location.reload(), 10000);
 	} else {
 		levelDiv.innerText = `Level ${levelReached + 1}`;
@@ -432,7 +438,9 @@ function Countdown() {
 	}
 }
 function nextLevel(currectLevel = 0) {
-	canvas.style.background = levelsImage[currectLevel];
+	// canvas.style.background = levelsImage[currectLevel];
+	// container.style.background = `url(levels.png)`;
+	if (currectLevel === 0) canvas.style.backgroundPosition = `0px 0px`;
 
 	playerData = {
 		name: playerName,
@@ -442,6 +450,10 @@ function nextLevel(currectLevel = 0) {
 	};
 
 	if (currectLevel > 0) {
+		width = 600 * -currectLevel;
+		if (width === 6000) width = 6000;
+		canvas.style.backgroundPosition = `${width}px 0px`;
+
 		nextLevelSound.currentTime = 0;
 		nextLevelSound.play();
 
@@ -502,16 +514,18 @@ function animateTeleporter(teleporter) {
 	}
 }
 function playBackgroundSound() {
-	if (Math.random() > 0.5) {
-		backgroundSound_2.pause();
-		backgroundSound_1.currectTime = 0;
-		backgroundSound_1.play();
-		backgroundSound_1.loop = true;
-	} else {
-		backgroundSound_1.pause();
-		backgroundSound_2.currectTime = 0;
-		backgroundSound_2.play();
-		backgroundSound_2.loop = true;
+	if (!soundInput.checked) {
+		if (Math.random() > 0.5) {
+			backgroundSound_2.pause();
+			backgroundSound_1.currectTime = 0;
+			backgroundSound_1.play();
+			backgroundSound_1.loop = true;
+		} else {
+			backgroundSound_1.pause();
+			backgroundSound_2.currectTime = 0;
+			backgroundSound_2.play();
+			backgroundSound_2.loop = true;
+		}
 	}
 }
 function pauseBackgroundSound() {
@@ -521,88 +535,114 @@ function pauseBackgroundSound() {
 function detectMob() {
 	return ((window.innerWidth <= 800) && (window.innerHeight <= 800));
 }
+
+function drawAllEntity() {
+	player.draw();
+	door.draw();
+	enemy.draw();
+
+	if (levelReached == 4 || levelReached == 8) {
+		if (teleporter_1 || teleporter_2 || teleporter_2) {
+			teleporter_1.drawT();
+			teleporter_2.drawT();
+			teleporter_3.drawT();
+
+			teleporters.forEach((teleporter) => {
+				animateTeleporter(teleporter);
+				teleporter.drawT();
+			});
+
+			// Collision with teleporter1
+			if (teleporter_1.isCollision(player)) player.teleport(teleporter_3);
+			if (teleporter_1.isCollision(enemy)) enemy.teleport(teleporter_3);
+
+			// Collision with teleporter2
+			if (teleporter_2.isCollision(player)) player.teleport(teleporter_3);
+			if (teleporter_2.isCollision(enemy)) enemy.teleport(teleporter_3);
+		}
+	}
+
+}
+
+function observeCollisions() {
+	if (door.isCollision(player)) {
+		levelReached = levelReached + 1;
+
+		walls = [];
+		walkSpots = [];
+		playerPath = [];
+
+		canvas.classList.add('animate-canvas');
+		canvas.addEventListener('animationend', () => {
+			canvas.classList.remove('animate-canvas');
+		});
+		changeGameState();
+		setTimeout(nextLevel(levelReached), 400);
+	}
+
+	if (enemy.isCollision(player) && !gameover) {
+		setTimeout(() => {
+			showSection(gameoverContainer);
+			hiddenSection(joystickContainer);
+
+			gameoverSpan.classList.add('animate-over');
+			gameoverSpan.addEventListener('animationend', () => {
+				gameoverSpan.classList.remove('animate-over');
+			});
+
+			pauseBackgroundSound()
+
+			gameoverSound.currentTime = 0;
+			gameoverSound.play();
+
+			gameover = true;
+			gameState = false;
+		}, 100);
+	}
+
+}
+
 function gameLoop() {
 	requestAnimationFrame(gameLoop);
 	if (!pauseInput.checked) {
-		hiddenSection(pauseSection);
 		c.clearRect(0, 0, cw, ch);
 
-		if (levelReached !== 9) {
+		if (levelReached !== levels.length - 1) {
 			if (gameState) timeScore();
-			player.draw();
-			door.draw();
-			enemy.draw();
 
-			if (door.isCollision(player)) {
-				levelReached = levelReached + 1;
+			drawAllEntity()
+			observeCollisions()
 
-				walls = [];
-				walkSpots = [];
-				playerPath = [];
-
-				canvas.classList.add('animate-canvas');
-				canvas.addEventListener('animationend', () => {
-					canvas.classList.remove('animate-canvas');
-				});
-				changeGameState();
-				setTimeout(nextLevel(levelReached), 400);
-			}
-
-			if (enemy.isCollision(player) && !gameover) {
-				setTimeout(() => {
-					showSection(gameoverContainer);
-					hiddenSection(joystickContainer);
-					gameoverSpan.classList.add('animate-over');
-					gameoverSpan.addEventListener('animationend', () => {
-						gameoverSpan.classList.remove('animate-over');
-					});
-
-					pauseBackgroundSound()
-
-					gameoverSound.currentTime = 0;
-					gameoverSound.play();
-
-					gameover = true;
-					gameState = false;
-				}, 100);
-			}
-
-			if (levelReached == 4 || levelReached == 8) {
-				if (teleporter_1 || teleporter_2 || teleporter_2) {
-					teleporter_1.drawT();
-					teleporter_2.drawT();
-					teleporter_3.drawT();
-
-					teleporters.forEach((teleporter) => {
-						animateTeleporter(teleporter);
-						teleporter.drawT();
-					});
-
-					// Collision with teleporter1
-					if (teleporter_1.isCollision(player)) player.teleport(teleporter_3);
-					if (teleporter_1.isCollision(enemy)) enemy.teleport(teleporter_3);
-
-					// Collision with teleporter2
-					if (teleporter_2.isCollision(player)) player.teleport(teleporter_3);
-					if (teleporter_2.isCollision(enemy)) enemy.teleport(teleporter_3);
-				}
-			}
-
-			backgroundSound_1.volume = 1;
-			backgroundSound_2.volume = 1;
 		}
+	}
+}
+
+pauseInput.addEventListener("change", () => {
+	if (!pauseInput.checked) {
+		hiddenSection(pauseSection);
+		backgroundSound_1.volume = 1;
+		backgroundSound_2.volume = 1;
 	} else {
 		showSection(pauseSection);
 		backgroundSound_1.volume = 0.3;
 		backgroundSound_2.volume = 0.3;
 	}
-}
+})
+soundInput.addEventListener("change", () => {
+	if (soundInput.checked) {
+		soundLabel.innerText = "🔇";
+		pauseBackgroundSound();
+	} else {
+		soundLabel.innerText = "🔊";
+		playBackgroundSound();
+	}
+})
 
 playButton.addEventListener('click', () => {
 	playerName = playerNameInput.value;
 	if (playerName == '') return alert('Necesitas Poner Tu Nombre!');
 	hiddenSection(homeContainer);
-	showSection(canvas);
+	showSection(gameContainer);
 	showSection(pauseContainer);
 	showSection(speedrunContainer);
 	showSection(timerContainer);
