@@ -101,7 +101,7 @@ let width = 0;
 
 // document.querySelector('.container').appendChild(level2)
 
-
+alert(getPlayerInfoFromSystem()[0].name)
 window.addEventListener('load', () => {
 	let storagePlayerInfo = getPlayerInfoFromSystem();
 	if (storagePlayerInfo.length !== 0) {
