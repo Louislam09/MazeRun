@@ -96,12 +96,15 @@ const levelsImage = [
 ];
 let width = 0;
 
+<<<<<<< HEAD
+=======
 // let level2 = new Image(600, 600);
 // level2.src = "levels/level_1.png"
 
 // document.querySelector('.container').appendChild(level2)
 
 alert(getPlayerInfoFromSystem()[0].name)
+>>>>>>> e135cc214b98224608f657f4c0ed8b2286d5671d
 window.addEventListener('load', () => {
 	let storagePlayerInfo = getPlayerInfoFromSystem();
 	if (storagePlayerInfo.length !== 0) {
@@ -457,24 +460,7 @@ function nextLevel(currectLevel = 0) {
 		nextLevelSound.currentTime = 0;
 		nextLevelSound.play();
 
-		if (getPlayerInfoFromSystem().length !== 0) {
-			let currectTime = parseInt(playerData.time.split(":").join(""));
-			let currectLevel = playerData.level;
-
-			let storageTime = parseInt(getPlayerInfoFromSystem()[0].time.split(":").join(""));
-			let storageLevel = getPlayerInfoFromSystem()[0].level;
-
-			if (currectLevel > storageLevel) {
-				saveDataToFirebase(playerData)
-			} else if (currectLevel === storageLevel && currectTime < storageTime) {
-				saveDataToFirebase(playerData)
-			} else {
-				console.log("You have not reached your storage level yet, Continue playing...!")
-			}
-
-		} else {
-			saveDataToFirebase(playerData);
-		}
+		saveDataToFirebase(playerData);
 
 		timeDiv.innerText = '';
 		showSection(timerContainer);
