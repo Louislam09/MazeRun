@@ -31,10 +31,12 @@ startGettingData();
 
 function saveDataToFirebase(data) {
 	if (data.key === undefined) {
+		alert("has not key")
 		let result = ref.push(data);
 		data.key = result.key;
 		playerKey = data.key;
 	} else {
+		alert("has key")
 		database.ref('scores/' + data.key).set(data);
 	}
 	savePlayerInfoToLocalstorage(data);
