@@ -6,7 +6,7 @@ let playerData = {
 };
 var arrDataReceived;
 
-alert(`${getPlayerInfoFromSystem()[0]}`)
+
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
