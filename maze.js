@@ -536,8 +536,6 @@ function drawAllEntity() {
 
 function observeCollisions() {
 	if (door.isCollision(player)) {
-		++levelReached;
-
 		walls = [];
 		walkSpots = [];
 		playerPath = [];
@@ -545,6 +543,7 @@ function observeCollisions() {
 		canvas.classList.add('animate-canvas');
 		canvas.addEventListener('animationend', () => {
 			canvas.classList.remove('animate-canvas');
+			levelReached = levelReached + 1;
 		});
 
 		playerData = {
