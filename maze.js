@@ -436,13 +436,6 @@ function nextLevel(currectLevel = 0) {
 	canvas.style.background = levelsImage[0];
 	if (currectLevel === 0) canvas.style.backgroundPosition = `0px 0px`;
 
-	playerData = {
-		name: playerName,
-		time: playerTime,
-		level: levelReached,
-		key: playerKey
-	};
-
 	if (currectLevel > 0) {
 		width = 600 * -currectLevel;
 		if (width === 6000) width = 6000;
@@ -586,7 +579,14 @@ function gameLoop() {
 
 		if (levelReached !== levels.length - 1) {
 			if (gameState) timeScore();
-
+			
+			playerData = {
+				name: playerName,
+				time: playerTime,
+				level: levelReached,
+				key: playerKey
+			};
+			
 			drawAllEntity()
 			observeCollisions()
 
