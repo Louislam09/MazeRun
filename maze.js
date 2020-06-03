@@ -437,6 +437,7 @@ function nextLevel(currectLevel = 0) {
 	if (currectLevel === 0) canvas.style.backgroundPosition = `0px 0px`;
 
 	if (currectLevel > 0) {
+		++currectLevel
 		width = 600 * -currectLevel;
 		if (width === 6000) width = 6000;
 		canvas.style.backgroundPosition = `${width}px 0px`;
@@ -536,6 +537,8 @@ function drawAllEntity() {
 
 function observeCollisions() {
 	if (door.isCollision(player)) {
+		levelReached = levelReached + 1;
+
 		walls = [];
 		walkSpots = [];
 		playerPath = [];
@@ -543,8 +546,8 @@ function observeCollisions() {
 		canvas.classList.add('animate-canvas');
 		canvas.addEventListener('animationend', () => {
 			canvas.classList.remove('animate-canvas');
-			levelReached = levelReached + 1;
-			
+		});
+
 		playerData = {
 			name: playerName,
 			time: playerTime,
@@ -553,10 +556,7 @@ function observeCollisions() {
 		};
 
 		changeGameState();
-		nextLevel(levelReached)
-		
-		});
-
+		setTimeout(nextLevel(levelReached), 400);
 	}
 
 	if (enemy.isCollision(player) && !gameover) {
