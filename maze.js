@@ -536,7 +536,7 @@ function drawAllEntity() {
 
 function observeCollisions() {
 	if (door.isCollision(player)) {
-		setTimeout(() => (levelReached = levelReached + 1), 300)
+		++levelReached;
 
 		walls = [];
 		walkSpots = [];
