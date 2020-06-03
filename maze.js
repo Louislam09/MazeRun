@@ -432,16 +432,24 @@ function Countdown() {
 		setTimeout(() => clearTimeout(followTimer), 3000);
 	}
 }
-function nextLevel(currectLevel = 0) {
+function nextLevel(currectLevel = -1) {
 	canvas.style.background = levelsImage[0];
 	if (currectLevel === 0) canvas.style.backgroundPosition = `0px 0px`;
-
-	if (currectLevel > 0) {
+	++levelReached;
+	currecetLevel = levelReached;
+	
+// 	if (currectLevel > 0) {
 		++currectLevel
 		width = 600 * -currectLevel;
 		if (width === 6000) width = 6000;
 		canvas.style.backgroundPosition = `${width}px 0px`;
 
+		playerData = {
+			name: playerName,
+			time: playerTime,
+			level: levelReached,
+			key: playerKey
+		};
 		nextLevelSound.currentTime = 0;
 		nextLevelSound.play();
 
@@ -452,7 +460,7 @@ function nextLevel(currectLevel = 0) {
 
 		waitingTime = 4;
 		startTime();
-	}
+// 	}
 
 	drawMaze(levels[currectLevel]);
 }
@@ -537,7 +545,7 @@ function drawAllEntity() {
 
 function observeCollisions() {
 	if (door.isCollision(player)) {
-		levelReached = levelReached + 1;
+// 		levelReached = levelReached + 1;
 
 		walls = [];
 		walkSpots = [];
@@ -548,15 +556,16 @@ function observeCollisions() {
 			canvas.classList.remove('animate-canvas');
 		});
 
-		playerData = {
-			name: playerName,
-			time: playerTime,
-			level: levelReached,
-			key: playerKey
-		};
+// 		playerData = {
+// 			name: playerName,
+// 			time: playerTime,
+// 			level: levelReached,
+// 			key: playerKey
+// 		};
 
 		changeGameState();
-		setTimeout(nextLevel(levelReached), 400);
+// 		setTimeout(nextLevel(levelReached), 400);
+		setTimeout(nextLevel(),400)
 	}
 
 	if (enemy.isCollision(player) && !gameover) {
