@@ -432,13 +432,13 @@ function Countdown() {
 		setTimeout(() => clearTimeout(followTimer), 3000);
 	}
 }
-function nextLevel(currectLevel = -1) {
+function nextLevel(currectLevel = 0) {
 	canvas.style.background = levelsImage[0];
 	if (currectLevel === 0) canvas.style.backgroundPosition = `0px 0px`;
-	++levelReached;
-	currecetLevel = levelReached;
+	levelReached++
+	currecetLevel = currecetLevel + levelReached;
 	
-// 	if (currectLevel > 0) {
+	if (currectLevel > 0) {
 		++currectLevel
 		width = 600 * -currectLevel;
 		if (width === 6000) width = 6000;
@@ -460,7 +460,7 @@ function nextLevel(currectLevel = -1) {
 
 		waitingTime = 4;
 		startTime();
-// 	}
+	}
 
 	drawMaze(levels[currectLevel]);
 }
