@@ -13,7 +13,7 @@ const Places = [
 	'8th🏅',
 	'9th🏅',
 	'10th🏅'
-	'
+	
 ];
 let infoList = [];
 var BESTSCORE;
