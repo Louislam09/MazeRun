@@ -73,15 +73,7 @@ function drawScore(data) {
 		}
 	});
 
-	oldScore.splice(11, oldScore.length);
-
-	// if (oldScore.length == 0) {
-	// 	BESTSCORE = 0;
-	// } else {
-	// 	BESTSCORE = oldScore[0].score;
-	// }
-
-	// oldScore.splice(10, 1);
+	oldScore.splice(10, oldScore.length);
 
 	tbody.innerHTML = '';
 
