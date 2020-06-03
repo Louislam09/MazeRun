@@ -439,7 +439,6 @@ function nextLevel(currectLevel = 0) {
 	currecetLevel = currecetLevel + levelReached;
 	
 	if (currectLevel > 0) {
-		++currectLevel
 		width = 600 * -currectLevel;
 		if (width === 6000) width = 6000;
 		canvas.style.backgroundPosition = `${width}px 0px`;
