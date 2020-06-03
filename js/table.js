@@ -12,12 +12,8 @@ const Places = [
 	'7th🏅',
 	'8th🏅',
 	'9th🏅',
-	'10th🏅',
-	'11th🏅',
-	'12th🏅',
-	'13th🏅',
-	'14th🏅',
-	'15th🏅'
+	'10th🏅'
+	'
 ];
 let infoList = [];
 var BESTSCORE;
@@ -76,6 +72,8 @@ function drawScore(data) {
 			return 0;
 		}
 	});
+
+	oldScore.splice(11, oldScore.length);
 
 	// if (oldScore.length == 0) {
 	// 	BESTSCORE = 0;
