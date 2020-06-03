@@ -536,7 +536,7 @@ function drawAllEntity() {
 
 function observeCollisions() {
 	if (door.isCollision(player)) {
-		levelReached = levelReached + 1;
+		setTimeout(() => (levelReached = levelReached + 1), 300)
 
 		walls = [];
 		walkSpots = [];
@@ -546,6 +546,14 @@ function observeCollisions() {
 		canvas.addEventListener('animationend', () => {
 			canvas.classList.remove('animate-canvas');
 		});
+
+		playerData = {
+			name: playerName,
+			time: playerTime,
+			level: levelReached,
+			key: playerKey
+		};
+
 		changeGameState();
 		setTimeout(nextLevel(levelReached), 400);
 	}
@@ -579,16 +587,12 @@ function gameLoop() {
 
 		if (levelReached !== levels.length - 1) {
 			if (gameState) timeScore();
-			
-			playerData = {
-				name: playerName,
-				time: playerTime,
-				level: levelReached,
-				key: playerKey
-			};
-			
+
+
+
 			drawAllEntity()
 			observeCollisions()
+
 
 		}
 	}
