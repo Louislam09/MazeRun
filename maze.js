@@ -544,8 +544,7 @@ function observeCollisions() {
 		canvas.addEventListener('animationend', () => {
 			canvas.classList.remove('animate-canvas');
 			levelReached = levelReached + 1;
-		});
-
+			
 		playerData = {
 			name: playerName,
 			time: playerTime,
@@ -554,7 +553,10 @@ function observeCollisions() {
 		};
 
 		changeGameState();
-		setTimeout(nextLevel(levelReached), 400);
+		nextLevel(levelReached)
+		
+		});
+
 	}
 
 	if (enemy.isCollision(player) && !gameover) {
