@@ -436,7 +436,7 @@ function nextLevel(currectLevel = 0) {
 	canvas.style.background = levelsImage[0];
 	if (currectLevel === 0) canvas.style.backgroundPosition = `0px 0px`;
 	levelReached++
-	currecetLevel = currecetLevel + levelReached;
+	currectLevel = currectLevel + levelReached;
 	
 	if (currectLevel > 0) {
 		width = 600 * -currectLevel;
