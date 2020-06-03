@@ -32,34 +32,36 @@ startGettingData();
 function saveDataToFirebase(data) {
 	savePlayerInfoToLocalstorage(data);
 
-	let storageArr = [];
+	// let storageArr = [];
 
-	arrDataReceived.forEach(arr => {
-		if (arr.key === data.key) {
-			storageArr.push(arr)
-			return
-		}
-	})
+	// arrDataReceived.forEach(arr => {
+	// 	if (arr.key === data.key) {
+	// 		storageArr.push(arr)
+	// 		return
+	// 	}
+	// })
+	
+	ref.push(data);
 
-	if (data.key === undefined) {
-		let result = ref.push(data);
-		data.key = result.key;
-		playerKey = data.key;
-	} else {
-		let currectTime = parseInt(playerData.time.split(":").join(""));
-		let currectLevel = playerData.level;
+	// if (data.key === undefined) {
+	// 	let result = ref.push(data);
+	// 	data.key = result.key;
+	// 	playerKey = data.key;
+	// } else {
+	// 	let currectTime = parseInt(data.time.split(":").join(""));
+	// 	let currectLevel = data.level;
 
-		let storageTime = parseInt(storageArr[0].time.split(":").join(""));
-		let storageLevel = storageArr[0].level;
+	// 	let storageTime = parseInt(storageArr[0].time.split(":").join(""));
+	// 	let storageLevel = storageArr[0].level;
 
-		if (currectLevel > storageLevel) {
-			database.ref('scores/' + data.key).set(data);
-		} else if (currectLevel === storageLevel && currectTime < storageTime) {
-			database.ref('scores/' + data.key).set(data);
-		} else {
-			console.log("You have not reached your storage level yet, Continue playing...!")
-		}
-	}
+	// 	if (currectLevel > storageLevel) {
+	// 		database.ref('scores/' + data.key).set(data);
+	// 	} else if (currectLevel === storageLevel && currectTime < storageTime) {
+	// 		database.ref('scores/' + data.key).set(data);
+	// 	} else {
+	// 		console.log("You have not reached your storage level yet, Continue playing...!")
+	// 	}
+	// }
 }
 
 function gotData(data) {
